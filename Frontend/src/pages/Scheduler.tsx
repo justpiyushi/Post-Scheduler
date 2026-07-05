@@ -90,7 +90,7 @@ const Scheduler = () => {
                 required
                 rows={5}
                 placeholder="What do you want to share today?"
-                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-sm placeholder-slate-400 outline-none resize:none"
+                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-sm placeholder-slate-400 outline-none resize-none"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
@@ -165,7 +165,7 @@ const Scheduler = () => {
 
               <div className="">
                 <label className="block text-xs text-slate-500 uppercase mb-2">
-                  Date
+                  Time
                 </label>
                 <div className="relative">
                   <ClockIcon className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
