@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route.js";
 import socialAuthRouter from "./routes/socialAuth.route.js";
 import accountRouter from "./routes/account.route.js";
 import postRouter from "./routes/post.route.js";
+import activityRouter from "./routes/activity.route.js";
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use("/api/v1/oauth", socialAuthRouter);
 app.use("/api/v1/accounts", accountRouter);
 
 app.use("/api/v1/posts", postRouter);
+
+app.use("/activity", activityRouter);
 
 // Global error handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
