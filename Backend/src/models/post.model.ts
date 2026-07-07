@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     content: {
-      tyep: String,
+      type: String,
       required: true,
     },
     mediaUrl: {
