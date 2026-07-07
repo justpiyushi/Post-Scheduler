@@ -17,7 +17,12 @@ app.use(
   }),
 );
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 
 app.get("/", (_req: Request, res: Response) => {
@@ -32,7 +37,7 @@ app.use("/api/v1/accounts", accountRouter);
 
 app.use("/api/v1/posts", postRouter);
 
-app.use("/activity", activityRouter);
+app.use("/api/v1/activity", activityRouter);
 
 // Global error handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

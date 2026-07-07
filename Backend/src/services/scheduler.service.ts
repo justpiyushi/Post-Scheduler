@@ -74,6 +74,7 @@ export const initScheduler = () => {
             relatedPost: post._id,
           });
         } catch (error: any) {
+          console.log(error)
           console.error(
             `Failed to publish post ${post._id}:`,
             error?.response?.data || error?.message,

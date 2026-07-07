@@ -7,11 +7,7 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  dummyAccountsData,
-  dummyActivityData,
-  dummyPostsData,
-} from "../assets/assets";
+import api from "../api/axios.api";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -25,11 +21,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [postRes, accountRes, activityRes] = [
-          { data: dummyPostsData },
-          { data: dummyAccountsData },
-          { data: dummyActivityData },
-        ];
+        const [postRes, accountRes, activityRes] = await Promise.all([
+          api.get("/api/v1/posts"),
+          api.get("/api/v1/accounts"),
+          api.get("/api/v1/activity"),
+        ]);
 
         const posts = postRes.data;
         const accounts = accountRes.data;

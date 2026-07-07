@@ -57,7 +57,7 @@ export const generatePost = async (
     if (generateImage && imagePrompt) {
       try {
         const interaction = await ai.interactions.create({
-          model: "gemini-2.5-flash-image",
+          model: "gemini-3.1-flash-lite-image",
           input: imagePrompt,
         });
 
@@ -79,12 +79,19 @@ export const generatePost = async (
         );
 
         mediaUrl = uploadResult.secure_url;
-      } catch (error) {
-        console.error("Image Generation/Upload failed:", error);
-        res.status(502).json({
-          message: "Failed to generate or upload the image.",
-        });
-        return;
+      } catch (error: any) {
+        console.error("Image Generation/Upload failed:", error.message || error);
+        
+        // Check if it's a rate limit error (429)
+        if (error?.status === 429 || error?.statusCode === 429) {
+           console.log("Rate limit hit for image generation. Proceeding with text only.");
+           // We do NOT return here. We let the code continue to step 3 to save the text post.
+        } else {
+           // For other critical errors, you might still want to fail the request
+           res.status(500).json({
+             message: "Failed to generate or upload the image.",
+           });
+        }
       }
     }
 
