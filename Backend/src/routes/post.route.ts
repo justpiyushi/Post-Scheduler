@@ -9,7 +9,12 @@ postRouter.get("/", protect, postController.getPosts);
 
 postRouter.get("/generations", protect, postController.getGenerations);
 
-postRouter.post("/", protect, postController.schedulePost);
+postRouter.post(
+  "/",
+  protect,
+  upload.single("media"),
+  postController.schedulePost,
+);
 
 postRouter.post(
   "/generate",

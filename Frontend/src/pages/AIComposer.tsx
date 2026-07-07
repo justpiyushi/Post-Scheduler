@@ -9,7 +9,9 @@ import {
   XIcon,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { dummyGenerationData, PLATFORMS } from "../assets/assets";
+import { PLATFORMS } from "../assets/assets";
+import api from "../api/axios.api";
+import toast from "react-hot-toast";
 
 const AIComposer = () => {
   const [prompt, setPrompt] = useState("");
@@ -32,23 +34,69 @@ const AIComposer = () => {
   const tones = ["Professional", "Creative", "Funny", "Minimalist", "Excited"];
 
   const fetchGenerations = async () => {
-    setGenerations(dummyGenerationData);
+    try {
+      const { data } = await api.get("api/v1/posts/generations");
+      setGenerations(data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   const handleGenerate = async () => {
-    setLoading(true);
+    if (!prompt) {
+      toast.error("Please provide a prompt");
+      return;
+    }
 
-    setTimeout(() => {
+    setLoading(true);
+    try {
+      const { data } = await api.post("api/v1/posts/generate", {
+        prompt,
+        tone,
+        generateImage,
+      });
+      setGenerations([data, ...generations]);
+      setActiveScheduler(data);
+      toast.success("Content generated");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   const handleSchedule = async () => {
-    setScheduling(true);
+    if (!activeScheduler) return;
+    if (selectedPlatforms.length === 0) {
+      toast.error("Select at least one platform");
+      return;
+    }
 
-    setTimeout(() => {
+    if (!scheduledDate || !scheduledTime) {
+      toast.error("Please select date and time");
+      return;
+    }
+
+    const scheduledFor = new Date(
+      `${scheduledDate}T${scheduledTime}`,
+    ).toISOString();
+    setScheduling(true);
+    try {
+      await api.post("/api/v1/posts", {
+        content: activeScheduler.content,
+        mediaUrl: activeScheduler.mediaUrl,
+        mediaType: activeScheduler.mediaType,
+        platforms: selectedPlatforms,
+        scheduledFor,
+        status: "scheduled",
+      });
+      toast.success("Post Scheduled");
+      closeScheduler();
+    } catch (error: any) {
+      toast.error(error.message || "Failed to schedule");
+    } finally {
       setScheduling(false);
-    }, 2000);
+    }
   };
 
   const closeScheduler = () => {
