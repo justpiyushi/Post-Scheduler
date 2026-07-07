@@ -14,6 +14,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/genai": "^2.10.0",
     "@zernio/node": "^0.2.312",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
