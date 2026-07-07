@@ -3,7 +3,9 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js";
-import socialAuthRouter from "./routes/socialAuth.route.js"
+import socialAuthRouter from "./routes/socialAuth.route.js";
+import accountRouter from "./routes/account.route.js";
+import postRouter from "./routes/post.route.js";
 
 const app = express();
 
@@ -23,7 +25,11 @@ app.get("/", (_req: Request, res: Response) => {
 
 app.use("/api/v1/auth", authRouter);
 
-app.use("/api/v1/oauth",socialAuthRouter)
+app.use("/api/v1/oauth", socialAuthRouter);
+
+app.use("/api/v1/accounts", accountRouter);
+
+app.use("/api/v1/posts", postRouter);
 
 // Global error handler
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
